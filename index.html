@@ -11,7 +11,7 @@
 
         let count = 1;
         registerSelector("button", ( aButton ) => {
-            console.log("adding event listener to new button element");
+            console.log("adding event listener to new button element", aButton);
             aButton.addEventListener('click', () => {
                 const button = document.createElement('button');
                 button.innerHTML = `Button ${count++}`
