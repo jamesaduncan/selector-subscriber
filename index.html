@@ -9,10 +9,13 @@
     <script type="module">
         import registerSelector from "https://jamesaduncan.github.io/selector-subscriber/index.mjs";
 
+        let count = 1;
         registerSelector("button", ( aButton ) => {
             console.log("adding event listener to new button element");
             aButton.addEventListener('click', () => {
-                aButton.after( document.createElement('button') );
+                const button = document.createElement('button');
+                button.innerHTML = `Button ${count++}`
+                aButton.after( button );
             });
         })
     </script>
