@@ -4,12 +4,6 @@
     <title>Selector Subscriber test</title>
     <script type="module">
         import registerSelector from "https://jamesaduncan.github.io/selector-subscriber/index.mjs";
-    </script>
-</head>
-<body>
-    <h1>Click the button</h1>
-    <button>Button</button>
-    <script type="module">
         let count = 1;
         registerSelector("button", ( aButton ) => {
             console.log("adding event listener to new button element", aButton);
@@ -20,5 +14,9 @@
             });
         })
     </script>
+</head>
+<body>
+    <h1>Click the button</h1>
+    <button>Button</button>
 </body>
 </html>
