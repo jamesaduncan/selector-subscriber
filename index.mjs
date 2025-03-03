@@ -11,6 +11,12 @@ function registerSelector ( selector, callback ) {
 
 document.addEventListener('DOMContentLoaded', async() => {
     const registry = self._selectorReg;    
+
+    const customElements = Array.from( document.getElementsByTagName('*') ).filter( (e) => {        
+        return !!self.customElements.get(e.nodeName.toLowerCase());
+    });
+    const shadows = customElements.map( e => e.shadowRoot );
+
     const selectors = Object.keys( self._selectorReg );
     for ( const selector of selectors ) {
         const nodes = Array.from( [document, ...shadows].map( e => Array.from( e.querySelectorAll( selector ) ) ) ).flat();
