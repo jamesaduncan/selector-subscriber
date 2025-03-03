@@ -3,7 +3,7 @@
 <head>
     <title>Selector Subscriber test</title>
     <script type="module">
-        import registerSelector from "https://jamesaduncan.github.io/selector-subscriber/index.mjs";
+        import registerSelector from "./index.mjs";
         let count = 1;
         registerSelector("button", ( aButton ) => {
             console.log("adding event listener to new button element", aButton);
