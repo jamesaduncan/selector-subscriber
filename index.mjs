@@ -1,6 +1,6 @@
 self._selectorReg = {};
 
-document.registerSelector  = function( selector, callback ) {
+function registerSelector ( selector, callback ) {
     const registry = self._selectorReg;
     if ( registry[ selector ] ) {
         registry[ selector ].push( callback );
@@ -45,3 +45,4 @@ document.addEventListener('DOMContentLoaded', async() => {
 });
 
 
+export default registerSelector;
