@@ -2,18 +2,16 @@ self._selectorReg = {};
 
 class SelectorSubscriber {
 
+    static contentHasLoaded = false;
+
     static {
         document.addEventListener('DOMContentLoaded', async() => {
             const registry = self._selectorReg;    
-        
-            const customElements = Array.from( document.getElementsByTagName('*') ).filter( (e) => {        
-                return !!self.customElements.get(e.nodeName.toLowerCase());
-            });
-            const shadows = customElements.map( e => e.shadowRoot );
-        
+            const shadows = this.customElementRoots();
+
             const selectors = Object.keys( self._selectorReg );
             for ( const selector of selectors ) {
-                const nodes = Array.from( [document, ...shadows].map( e => Array.from( e.querySelectorAll( selector ) ) ) ).flat();
+                const nodes = Array.from( [document, ...shadows].map( e => Array.from( e.querySelectorAll( selector ) ) ) ).flat();                
                 for ( const node of nodes ) {
                     for ( const cb of registry[ selector ] ) {
                         cb( node, selector );
@@ -28,7 +26,7 @@ class SelectorSubscriber {
                     if ( mutation.addedNodes.length > 0 ) {
                         mutation.addedNodes.forEach( (node) => {
                             for ( const selector of selectors ) {
-                                if (node.matches( selector )) {
+                                if (node.matches && node.matches( selector )) {
                                     for ( const cb of registry[ selector ] ) {
                                         cb( node, selector );
                                     }      
@@ -40,7 +38,16 @@ class SelectorSubscriber {
             });
             
             observer.observe(document.querySelector('body').parentNode, { childList: true, subtree: true });
+            this.contentHasLoaded = true;
+
         });        
+    }
+
+    static customElementRoots () {
+        const customElements = Array.from( document.getElementsByTagName('*') ).filter( (e) => {        
+            return !!self.customElements.get(e.nodeName.toLowerCase());
+        });
+        return customElements.map( e => e.shadowRoot );        
     }
 
     static subscribe ( selector, callback ) {
@@ -50,6 +57,17 @@ class SelectorSubscriber {
         } else {
             registry[ selector ] = [ callback ];
         }
+
+        if ( this.contentHasLoaded ) {
+            /* whenever a selector is subscribed to, we need to check and see if a match is already going */
+            const shadows = this.customElementRoots();
+            const nodes = Array.from( [document, ...shadows].map( e => Array.from( e.querySelectorAll( selector ) ) ) ).flat();
+            for ( const node of nodes ) {
+                for ( const cb of registry[ selector ] ) {
+                    cb( node, selector );
+                }      
+            }
+        }            
     };    
 
 }
