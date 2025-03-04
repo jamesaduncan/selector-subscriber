@@ -3,9 +3,9 @@
 <head>
     <title>Selector Subscriber test</title>
     <script type="module">
-        import registerSelector from "./index.mjs";
+        import SelectorSubscriber from "./index.mjs";
         let count = 1;
-        registerSelector("button", ( aButton ) => {
+        SelectorSubscriber.subscribe("button", ( aButton ) => {
             console.log("adding event listener to new button element", aButton);
             aButton.addEventListener('click', () => {
                 const button = document.createElement('button');
