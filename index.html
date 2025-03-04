@@ -5,8 +5,9 @@
     <script type="module">
         import SelectorSubscriber from "./index.mjs";
         let count = 1;
+
+
         SelectorSubscriber.subscribe("button", ( aButton ) => {
-            console.log("adding event listener to new button element", aButton);
             aButton.addEventListener('click', () => {
                 const button = document.createElement('button');
                 button.innerHTML = `Button ${count++}`

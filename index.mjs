@@ -5,28 +5,24 @@ class SelectorSubscriber {
     static contentHasLoaded = false;
 
     static {
-        document.addEventListener('DOMContentLoaded', async() => {
-           const observer = new MutationObserver( function( mutationList, observer ) {
-                const registry  = self._selectorReg;
-                const selectors = Object.keys( self._selectorReg );
-                for ( const mutation of mutationList ) {
-                    if ( mutation.addedNodes.length > 0 ) {
-                        mutation.addedNodes.forEach( (node) => {
-                            for ( const selector of selectors ) {
-                                if (node.matches && node.matches( selector )) {
-                                    for ( const cb of registry[ selector ] ) {
-                                        cb( node, selector );
-                                    }      
-                                }
+        const observer = new MutationObserver( function( mutationList, observer ) {
+            const registry  = self._selectorReg;
+            const selectors = Object.keys( self._selectorReg );
+            for ( const mutation of mutationList ) {
+                if ( mutation.addedNodes.length > 0 ) {
+                    mutation.addedNodes.forEach( (node) => {
+                        for ( const selector of selectors ) {                            
+                            if (node.matches && node.matches( selector )) {
+                                for ( const cb of registry[ selector ] ) {
+                                    cb( node, selector );
+                                }      
                             }
-                        });
-                    }
+                        }
+                    });
                 }
-            });
-            
-            observer.observe(document.querySelector('body').parentNode, { childList: true, subtree: true });
-            this.contentHasLoaded = true;
-        });        
+            }
+        });
+        observer.observe(document.querySelector('body').parentNode, { childList: true, subtree: true });
     }
 
     static customElementRoots () {
@@ -44,16 +40,14 @@ class SelectorSubscriber {
             registry[ selector ] = [ callback ];
         }
 
-        if ( this.contentHasLoaded ) {
-            /* whenever a selector is subscribed to, we need to check and see if a match is already going */
-            const shadows = this.customElementRoots();
-            const nodes = Array.from( [document, ...shadows].map( e => Array.from( e.querySelectorAll( selector ) ) ) ).flat();
-            for ( const node of nodes ) {
-                for ( const cb of registry[ selector ] ) {
-                    cb( node, selector );
-                }      
-            }
-        }            
+        /* whenever a selector is subscribed to, we need to check and see if a match is already going */
+        const shadows = this.customElementRoots();
+        const nodes = Array.from( [document, ...shadows].map( e => Array.from( e.querySelectorAll( selector ) ) ) ).flat();
+        for ( const node of nodes ) {
+            for ( const cb of registry[ selector ] ) {
+                cb( node, selector );
+            }      
+        }
     };    
 
 }
