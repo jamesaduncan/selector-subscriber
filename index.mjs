@@ -6,20 +6,7 @@ class SelectorSubscriber {
 
     static {
         document.addEventListener('DOMContentLoaded', async() => {
-            const registry = self._selectorReg;    
-            const shadows = this.customElementRoots();
-
-            const selectors = Object.keys( self._selectorReg );
-            for ( const selector of selectors ) {
-                const nodes = Array.from( [document, ...shadows].map( e => Array.from( e.querySelectorAll( selector ) ) ) ).flat();                
-                for ( const node of nodes ) {
-                    for ( const cb of registry[ selector ] ) {
-                        cb( node, selector );
-                    }      
-                }    
-            }
-            
-            const observer = new MutationObserver( function( mutationList, observer ) {
+           const observer = new MutationObserver( function( mutationList, observer ) {
                 const registry  = self._selectorReg;
                 const selectors = Object.keys( self._selectorReg );
                 for ( const mutation of mutationList ) {
@@ -39,7 +26,6 @@ class SelectorSubscriber {
             
             observer.observe(document.querySelector('body').parentNode, { childList: true, subtree: true });
             this.contentHasLoaded = true;
-
         });        
     }
 
