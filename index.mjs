@@ -49,7 +49,7 @@ class SelectorSubscriber {
         }
 
         /* whenever a selector is subscribed to, we need to check and see if a match is already going */
-        const shadows = this.customElementRoots();
+        const shadows = this.customElementRoots() || [];
         const nodes = Array.from( [document, ...shadows].map( e => Array.from( e.querySelectorAll( selector ) ) ) ).flat();
         for ( const node of nodes ) {
             for ( const cb of registry[ selector ] ) {
