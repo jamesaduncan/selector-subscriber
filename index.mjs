@@ -11,8 +11,9 @@ class SelectorSubscriber {
             for ( const mutation of mutationList ) {
                 if ( mutation.addedNodes.length > 0 ) {
                     mutation.addedNodes.forEach( (node) => {
-                        for ( const selector of selectors ) {                            
-                            if (node.matches && node.matches( selector )) {
+                        for ( const selector of selectors ) {
+                            // we want to test the node and its children                             
+                            if ( (node.querySelector && node.querySelector( selector )) || ( node.matches && node.matches( selector )) ) {
                                 for ( const cb of registry[ selector ] ) {
                                     cb( node, selector );
                                 }      
