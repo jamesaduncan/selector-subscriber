@@ -12,10 +12,14 @@ class SelectorSubscriber {
                 if ( mutation.addedNodes.length > 0 ) {
                     mutation.addedNodes.forEach( (node) => {
                         for ( const selector of selectors ) {
-                            // we want to test the node and its children                             
-                            if ( (node.querySelector && node.querySelector( selector )) || ( node.matches && node.matches( selector )) ) {
+                            // we want to test the node and its children
+                            let runWithNode;
+                            if ( node.qerySelector && node.querySelector(selector )) runWithNode = node.querySelector( selector );
+                            else if ( node.matches && node.matches( selector )) runWithNode = node;
+
+                            if ( runWithNode ) {
                                 for ( const cb of registry[ selector ] ) {
-                                    cb( node, selector );
+                                    cb( runWithNode, selector );
                                 }      
                             }
                         }
