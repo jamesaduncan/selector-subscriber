@@ -14,7 +14,7 @@ class SelectorSubscriber {
                         for ( const selector of selectors ) {
                             // we want to test the node and its children
                             let runWithNode;
-                            if ( node.qerySelector && node.querySelector(selector )) runWithNode = node.querySelector( selector );
+                            if ( node.querySelector && node.querySelector(selector )) runWithNode = node.querySelector( selector );
                             else if ( node.matches && node.matches( selector )) runWithNode = node;
 
                             if ( runWithNode ) {
