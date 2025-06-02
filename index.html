@@ -2,22 +2,40 @@
 <html lang="en">
 <head>
     <title>Selector Subscriber test</title>
-    <script type="module">
-        import SelectorSubscriber from "./index.mjs";
-        let count = 1;
-
-
-        SelectorSubscriber.subscribe("button", ( aButton ) => {
-            aButton.addEventListener('click', () => {
-                const button = document.createElement('button');
-                button.innerHTML = `Button ${count++}`
-                aButton.after( button );
-            });
-        })
-    </script>
+    <script type="module" src="https://jamesaduncan.github.io/dom-inline-example/index.mjs"></script>
 </head>
 <body>
-    <h1>Click the button</h1>
-    <button>Button</button>
+    <h1>SelectorSubscriber</h1>
+    <p>
+        I've been playing around a lot lately with trying to make the web a more pleasent environment to work in. By which, I mean going back to
+        where it was before the days of single page applications, where you could just write a bit of HTML and it would work, but try to retain
+        some of the magic of single page applications.
+    </p>
+    <p>
+        I frequently found myself getting caught out because I forgot to add an event listener to a newly created element. Rather than repeat that
+        mistake, I put together this little helper to automatically add event listeners to elements that match a selector, whenever they present in the DOM.
+    </p>
+    <p>
+        This example shows how to use the <code>SelectorSubscriber</code> to add a click event listener to a button. When the button is clicked, it creates a new button and adds it to the DOM.
+        The new button will immediately get a click event listener added to it, so you can keep clicking the button to create more buttons. It's a trivial example, but it demonstrates the concept.
+        <inline-example include="true">
+            <script type="module">
+                import { SelectorSubscriber } from "https://jamesaduncan.github.io/selector-subscriber/index.mjs";
+                let count = 1;
+        
+                SelectorSubscriber.subscribe("button", ( aButton ) => {
+                    aButton.addEventListener('click', () => {
+                        const button = document.createElement('button');
+                        button.appendChild( document.createTextNode(`Button ${count++}`) );
+                        aButton.after( button );
+                    });
+                })
+            </script>    
+        </inline-example>
+    </p>
+    <section class="example">
+        <h1>Click the button</h1>
+        <button>Button</button>
+    </section>
 </body>
 </html>

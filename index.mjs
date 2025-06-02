@@ -64,5 +64,5 @@ class SelectorSubscriber {
 }
 
 
-
+export { SelectorSubscriber };
 export default SelectorSubscriber;
